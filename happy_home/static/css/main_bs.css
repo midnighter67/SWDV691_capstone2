@@ -1,0 +1,44 @@
+/* colors
+    Golden Rod:        #D5B740
+    Sienna:            #8A6822
+    Beige:             #E9E7CE
+    Dark Olive Green:  #7F664A
+    Dark Khaki:        #ABB26D
+*/
+body {
+  font-family: "Gill Sans", Helvetica, Arial, "sans-serif";
+}
+footer {
+  background-color: #E9E7CE;
+}
+.navbar {
+  background-color:#E9E7CE;  
+  font-family: Gill Sans;
+}
+.navbar-toggler {
+  margin-left: 85%;
+}
+#logo {
+  padding-left: 20px;
+}
+.footer {
+  background-color:  #E9E7CE;
+}
+.btn {
+  background-color: #E9E7CE; 
+  border-color: #7F664A; 
+  border-radius: 3px; 
+  color: #7F664A;
+}
+.dropdown {
+  background-color: #E9E7CE; 
+  border-color: #7F664A; 
+  border-radius: 3px; 
+  color: #7F664A;
+}
+.container-bordered {
+  border: 2px solid black;
+}
+a .page-links {
+  text-decoration: none;
+}
