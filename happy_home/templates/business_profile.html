@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+
+<div class="row d-flex justify-content-center pb-5">
+    <div class="col-md-1">
+        <p><small><a class="page-links"  style="text-decoration: none;" href="#">reviews</a></small></p> <!-- url 'businessReviews' -->
+    </div>
+    <div class="col-md-2">
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 
+    </div>
+</div>
+<div class="row">
+    <div><h3 class="pb-3 px-3">Update Profile</h3></div>
+    <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto">
+
+        <form method="POST" action="{% url 'businessProfile' %}">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-warning alert-dismissable" role="alert">
+                    
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>Errors:</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {{ field.errors }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+    
+            {{business_profile_form.as_p }}
+            <input type="submit" value="Update" class="btn btn-secondary">
+        </form>
+    </div>
+
+    <div class="col-md-1"></div>
+    
+    <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto my-auto">
+            <form method="POST" action="{% url 'businessProfile' %}">
+            <div class="form-control form-check mb-2">
+                <input class="form-check-input" type="radio" name="cleaning" id="cleaning" /><label class="px-2" for="cleaning">Cleaning</label>
+            </div>
+            <div class="form-control form-check mb-2">
+                <input class="form-check-input" type="radio" name="plumbing" id="plumbing" /><label class="px-2" for="plumbing">Plumbing</label>
+            </div>
+            <div class="form-control form-check mb-2">
+                <input class="form-check-input" type="radio" name="electrical" id="electrical" /><label class="px-2" for="electrical">Electrical</label>
+            </div>
+            <div class="form-control form-check mb-2">
+                <input class="form-check-input" type="radio" name="improvement" id="improvement" /><label class="px-2" for="improvement">Improvement</label>
+            </div>
+            <div class="form-control form-check mb-2">
+                <input class="form-check-input" type="radio" name="landscape" id="landscape" /><label class="px-2" for="landscape">Landscape</label>
+            </div>
+
+        </form>
+    </div>
+</div> <!-- row -->
+<br/><br/>
+<p><small><a href="#">Click Here</a> To change your password</small></p><br/> <!-- url 'changePassword' -->
+    
+{% endblock %}

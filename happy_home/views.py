@@ -1,24 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+# from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.http import HttpResponse
 from django.http import HttpRequest
-from .models import User
-from .forms import LoginForm, SignUpForm
+from .models import Provider, Consumer, Rating
+from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm
 from django.contrib import messages
 import json
 
 # Create your views here.
 
-
 def home(request):
+    """ Initial landing page that also hosts the search funtion """
     if request.method == 'GET':
         message = "Hello World"
     else:
         message = "Hello World!"
     return render(request, 'home.html', {'message':message})
 
-def login_view(request):
+def login_user(request):
+    """ User authentication for both user and provider"""
     form = LoginForm(request.POST or None)
     msg = None
     if request.method == 'POST':
@@ -38,99 +39,79 @@ def login_view(request):
         msg = 'invalid form'
     return render(request, 'login.html', {'form':form, 'msg':msg})
 
-def register(request):
-    msg = None
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            msg = 'user created'
-            return redirect('login')
-        else:
-            msg = 'form is not valid'
-    else:
-        form = SignUpForm()
-    return render(request,'create_account.html', {'form': form, 'msg': msg})
-
-
-
-"""
-def login_user(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.is_provider:
-            login(request, user)
-            messages.success(request, ('You have been logged in'))
-            return redirect('business_profile')
-        elif user is not None and user.is_provider:
-            login(request, user)
-            messages.success(request, ('You have been logged in'))
-            return redirect('user_profile')
-        else:
-            messages.success(request, ('Error logging in'))
-            return redirect('login')
-    else:
-        return render(request, 'login.html', {})
-
 def logout_user(request):
+    """ Logout registered authenticated users and businesses """
     logout(request)
     messages.success(request, ('You have been logged out'))
     return redirect('home')
-"""
 
-"""
-def register_user(request):
-    if request.method == "POST":
-        form = RegisterUserForm(request.POST)
-        post = SiteUser()
-        if form.is_valid():
-            form.save()
-            post.role = form.cleaned_data['role']
-            post.first = form.cleaned_data['first_name']
-            post.last = form.cleaned_data['last_name']
-            post.email = form.cleaned_data['email']
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(request, username=username, password=password)
-            login(request, user)
-            messages.success(request, ('Account created'))
-            post.ref = request.user
-            post.save()
-            return redirect('home')
-    else:
-        form = RegisterUserForm()
-    context = {'form': form}
-    return render(request, 'create_user.html', context)
-
-"""
-"""
-def edit_profile(request):
-    if request.user.is_authenticated:
-        info = SiteUser.objects.get(ref=request.user)
-        form = UserProfileForm(request.POST or None, instance=info)
-        if form.is_valid():
-            form.save()
-            messages.success(request, ('Profile Updated'))
-            # return redirect('user_profile')
+def register(request):
+    """ register account for both user and business using a role field """
+    msg = None
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():  #  and (provider ^ consumer)
+            provider = form.cleaned_data['is_provider']
+            consumer = form.cleaned_data['is_user']
+            email = form.cleaned_data['email']
+            if provider ^ consumer:
+                user = form.save()
+                if provider:
+                    post = Provider()
+                else:
+                    post = Consumer()
+                post.email = email
+                post.save()
+                messages.success(request, ('Your account has been registered.  Please login.'))
+            else:
+                messages.success(request, ('Please select only one account, business or user.'))
+                return redirect('createAccount')
+            return redirect('login')
         else:
-            messages.success(request, ('Update Failed'))
-    context = {'profile_form': form}
-    return render(request, 'user_profile.html', context) # {'info': info, 'form': form}
+            messages.success(request, ('Form invalid.  Must be business or user.'))
+    else:
+        form = SignUpForm()
+    return render(request,'create_account.html', {'form': form})
 
 def change_password(request):
+    """ Update pass word for registered users, both user and business """
     if request.method == "POST":
-        form = PasswordChangeForm(data=request.POST, user=request.user)
+        form = UpdatePasswordForm(data=request.POST, user=request.user)
         if form.is_valid():
           form.save()
           update_session_auth_hash(request, form.user) # so updating password doesn't logout user
           messages.success(request, ('Password updated'))
-          return redirect('user_profile') # userProfile?
+          return redirect('home') 
     else:
-        form =PasswordChangeForm(user=request.user)
+        form =UpdatePasswordForm(user=request.user)
     context = {'password_form': form}
     return render(request, 'change_password.html', context) # return render(request, 'change_password.html', context)
+
+def edit_profile(request):
+    """ Update and display profile data for both user and business """
+    provider = False
+    if request.user.is_authenticated:
+        if request.user.is_provider:
+            provider = True
+            info = Provider.objects.get(email=request.user.email)
+            form = BusinessProfileForm(request.POST or None, instance=info)
+        elif request.user.is_user:
+            info = Consumer.objects.get(email=request.user.email)
+            form = UserProfileForm(request.POST or None, instance=info)
+        if form.is_valid():
+            form.save()
+            messages.success(request, ('Profile Updated'))
+            # return redirect('user_profile')
+    if provider:
+        context = {'business_profile_form': form}
+        route = 'business_profile.html'
+    else:
+        context = {'user_profile_form': form}
+        route = 'user_profile.html'
+    return render(request, route, context) # {'info': info, 'form': form}
+
+    
+"""
 
 def search_results(request):
     if request.method == "POST":
