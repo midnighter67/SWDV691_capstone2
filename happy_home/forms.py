@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import User, Provider, Consumer, Rating, Category
+from .models import User, Provider, Consumer, Rating
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 
@@ -142,7 +142,8 @@ class BusinessProfileForm(ModelForm):
 
     class Meta:
         model = Provider
-        fields = ('name', 'poc_first', 'poc_last', 'address', 'city', 'state', 'zip', 'email', 'phone', 'url', 'description')
+        fields = ('name', 'poc_first', 'poc_last', 'address', 'city', 'state', 'zip', 'email', 'phone', 'url', 'description', 'cleaning', 'plumbing', 'electrical', 'improvement', 'landscape')
+
 
     def __init__(self, *args, **kwargs):
         super(BusinessProfileForm, self).__init__(*args, **kwargs)
@@ -205,16 +206,30 @@ class BusinessProfileForm(ModelForm):
         self.fields['description'].widget.attrs['placeholder'] = ''
         self.fields['description'].help_text = ''
 
+        self.fields['cleaning'].widget.attrs['class'] = 'form-check-input'
+        self.fields['plumbing'].widget.attrs['class'] = 'form-check-input'
+        self.fields['electrical'].widget.attrs['class'] = 'form-check-input'
+        self.fields['improvement'].widget.attrs['class'] = 'form-check-input'
+        self.fields['landscape'].widget.attrs['class'] = 'form-check-input'
+"""
+        self.fields['cleaning'].widget.attrs['type'] = 'checkbox'
+        self.fields['cleaning'].widget.attrs['value'] = ''
+        self.fields['cleaning'].widget.attrs['id'] = 'flexCheckDefault'
+        self.fields['cleaning'].label = 'Cleaning'
+"""  
+
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = ('title', 'rating', 'text')
 
+
+"""
 class CategoryForm(forms.Form):
     class Meta:
         fields = ('cleaning', 'plumbing', 'electrical', 'improvement', 'landscape')
-
-    
+"""
+ 
 
 
 

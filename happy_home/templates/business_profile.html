@@ -14,55 +14,89 @@
     </div>
 </div>
 <div class="row">
-    <div><h3 class="pb-3 px-3">Update Profile</h3></div>
+    <h3 class="mb-3" style="text-align: center">Update Profile</h3>
     <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto">
-
         <form method="POST" action="{% url 'businessProfile' %}">
             {% csrf_token %}
-            {% if form.errors %}
-                <div class="alert alert-warning alert-dismissable" role="alert">
-                    
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>Errors:</p>
-                    {% for field in form %}
-                        {% if field.errors %}
-                            {{ field.errors }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-    
-            {{business_profile_form.as_p }}
+            <div class="mb-3">
+                <label for="FormControlInput1" class="form-label">Business Name</label>
+                {{ business_profile_form.name }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput2" class="form-label">First Name - Point of Contact</label>
+                {{ business_profile_form.poc_first }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput3" class="form-label">Last Name - Point of Contact</label>
+                {{ business_profile_form.poc_last }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput4" class="form-label">Address</label>
+                {{ business_profile_form.address }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput5" class="form-label">City</label>
+                {{ business_profile_form.city }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput6" class="form-label">State</label>
+                {{ business_profile_form.state }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput7" class="form-label">Zip Code</label>
+                {{ business_profile_form.zip }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput8" class="form-label">Email Address</label>
+                {{ business_profile_form.email }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput9" class="form-label">Phone Number</label>
+                {{ business_profile_form.phone }}
+            </div>
+            <div class="mb-3">
+                <label for="FormControlInput10" class="form-label">Website URL</label>
+                {{ business_profile_form.url }}
+            </div>
+            <div class="mb-5">
+                <label for="FormControlInput11" class="form-label">Description</label>
+                {{ business_profile_form.description }}
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="cleaning"  id="flexCheckChecked">{{ business_profile_form.cleaning }}</input>
+                <label class="form-check-label" for="flexCheckChecked">
+                Cleaning
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="plumbing" id="flexCheckChecked">{{ business_profile_form.plumbing }}</input>
+                <label class="form-check-label" for="flexCheckChecked">
+               Plumbing
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="electrical"  id="flexCheckChecked">{{ business_profile_form.electrical }}</input>
+                <label class="form-check-label" for="flexCheckChecked">
+                Electrical
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="improvement"  id="flexCheckChecked">{{ business_profile_form.improvement }}</input>
+                <label class="form-check-label" for="flexCheckChecked">
+                Improvement
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="landscape"  id="flexCheckChecked">{{ business_profile_form.landscape }}</input>
+                <label class="form-check-label" for="flexCheckChecked">
+                Landscape
+                </label>
+            </div>
             <input type="submit" value="Update" class="btn btn-secondary">
         </form>
+ 
     </div>
 
-    <div class="col-md-1"></div>
-    
-    <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto my-auto">
-            <form method="POST" action="{% url 'businessProfile' %}">
-            <div class="form-control form-check mb-2">
-                <input class="form-check-input" type="radio" name="cleaning" id="cleaning" /><label class="px-2" for="cleaning">Cleaning</label>
-            </div>
-            <div class="form-control form-check mb-2">
-                <input class="form-check-input" type="radio" name="plumbing" id="plumbing" /><label class="px-2" for="plumbing">Plumbing</label>
-            </div>
-            <div class="form-control form-check mb-2">
-                <input class="form-check-input" type="radio" name="electrical" id="electrical" /><label class="px-2" for="electrical">Electrical</label>
-            </div>
-            <div class="form-control form-check mb-2">
-                <input class="form-check-input" type="radio" name="improvement" id="improvement" /><label class="px-2" for="improvement">Improvement</label>
-            </div>
-            <div class="form-control form-check mb-2">
-                <input class="form-check-input" type="radio" name="landscape" id="landscape" /><label class="px-2" for="landscape">Landscape</label>
-            </div>
-
-        </form>
-    </div>
 </div> <!-- row -->
-<br/><br/>
-<p><small><a href="#">Click Here</a> To change your password</small></p><br/> <!-- url 'changePassword' -->
-    
+
 {% endblock %}

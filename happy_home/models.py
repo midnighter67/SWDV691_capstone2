@@ -20,6 +20,11 @@ class Provider(models.Model):
     url = models.CharField(max_length=500, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     description = models.CharField(max_length=5000, blank=True)
+    cleaning = models.BooleanField(default=False, blank=True)
+    plumbing = models.BooleanField(default=False, blank=True)
+    electrical = models.BooleanField(default=False, blank=True)
+    improvement = models.BooleanField(default=False, blank=True)
+    landscape = models.BooleanField(default=False, blank=True)
 
 class Consumer(models.Model):
     first = models.CharField(max_length=50)
@@ -30,6 +35,7 @@ class Consumer(models.Model):
     zip = models.CharField(max_length=20, blank=True)
     email = models.EmailField(max_length=200)
     phone = models.CharField(max_length=20, blank=True)
+    
 
 class Rating(models.Model):
     provider_id = models.ForeignKey(Provider, default=0, on_delete=models.CASCADE)
@@ -39,17 +45,29 @@ class Rating(models.Model):
     text = models.CharField(max_length=1000, blank=True)
     created = models.DateField(auto_now=True)
 
+
+
+
+"""
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
-
+"""
+"""
+1 - cleaning
+2 - plumbing
+3 - electrical
+4 - improvement
+5 - landscape
+"""
+"""
 class Classification(models.Model):
     provider_id = models.ForeignKey(Provider, default=-1, on_delete=models.CASCADE)
     category_id = models.ForeignKey(Category, default=-1, on_delete=models.CASCADE)
-
+"""
 
 
 

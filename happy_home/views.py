@@ -55,7 +55,7 @@ def register(request):
             consumer = form.cleaned_data['is_user']
             email = form.cleaned_data['email']
             if provider ^ consumer:
-                user = form.save()
+                form.save() # user = form.save()
                 if provider:
                     post = Provider()
                 else:
@@ -110,7 +110,13 @@ def edit_profile(request):
         route = 'user_profile.html'
     return render(request, route, context) # {'info': info, 'form': form}
 
-    
+"""
+    1 - cleaning
+    2 - plumbing
+    3 - electrical
+    4 - improvement
+    5 - landscape
+"""
 """
 
 def search_results(request):
