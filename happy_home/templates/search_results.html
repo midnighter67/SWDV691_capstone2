@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-4 mb-5">
+    <h2 class="">Search Results</h2>
+</div>
+
+{% for result in results %}
+
+    <div class="container-med mb-5">
+        <div class="row">
+            <div class="col-4">
+                <strong><h3 class="mb-2"><strong></strong>{{ result.name }}</strong></h3></strong>
+                <p>{{ result.description }}</p>
+            </div>
+
+                <div class="col-1">
+                    <small><a class="page-links"  style="text-decoration: none;" href="#">profile</a></small>
+                </div>
+                
+                <div class="col-1">
+                    <small><a class="page-links"  style="text-decoration: none;" href="#">contact</a></small>
+                </div>
+            
+        </div>
+    </div>
+
+{% endfor %}
+{% endblock %}

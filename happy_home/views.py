@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 # from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from django.http import HttpResponse
-from django.http import HttpRequest
+# from django.http import HttpResponse
+# from django.http import HttpRequest
 from .models import Provider, Consumer, Rating
 from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm
 from django.contrib import messages
-import json
+# import json
 
 # Create your views here.
 
@@ -110,23 +110,35 @@ def edit_profile(request):
         route = 'user_profile.html'
     return render(request, route, context) # {'info': info, 'form': form}
 
-"""
-    1 - cleaning
-    2 - plumbing
-    3 - electrical
-    4 - improvement
-    5 - landscape
-"""
-"""
-
 def search_results(request):
     if request.method == "POST":
-        text = request.POST['searchText']
-        results = Provider.objects.filter(name__contains=text)
-        return render(request, 'results.html', {'results':results})
+        if 'cleanSearch' in request.POST:
+            results = Provider.objects.filter(cleaning=True)
+            return render(request, 'search_results.html', {'results':results})
+        elif 'plumbingSearch' in request.POST:
+            results = Provider.objects.filter(plumbing=True)
+            return render(request, 'search_results.html', {'results':results})
+        elif 'electricalSearch' in request.POST:
+            results = Provider.objects.filter(electrical=True)
+            return render(request, 'search_results.html', {'results':results})
+        elif 'improvementSearch' in request.POST:
+            results = Provider.objects.filter(improvement=True)
+            return render(request, 'search_results.html', {'results':results})
+        elif 'landscapeSearch' in request.POST:
+            results = Provider.objects.filter(landscape=True)
+            return render(request, 'search_results.html', {'results':results})
+        else:
+            text = request.POST.get('searchText')
+            if text != None:
+                results = Provider.objects.filter(name__contains=text)
+                return render(request, 'search_results.html', {'results':results})
+            else:
+                results = None
+                return render(request, 'search_results.html', {'results':results})
     else:
-        return render(request, 'results.html', {})
+        return render(request, 'home.html', {})
     
+"""   
 def user_reviews(request):
     if request.method == "POST":
         mymethod = "post"

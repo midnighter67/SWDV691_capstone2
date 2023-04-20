@@ -4,25 +4,28 @@
 <div class="row mb-5">
     <div class="row mb-5"></div>
     <div class="row mb-5"></div>
-        <form class="input-group mb-5 justify-content-center pt-5" role="search" method="POST" action="#">
+        <form class="input-group mb-5 justify-content-center pt-5" role="search" method="POST" action="{% url 'searchResults' %}">
             {% csrf_token %}
-            <div class="dropdown mb-3">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Category
-                </button>
-                <ul class="dropdown-menu">
-                    <li><button class="dropdown-item" type="button" name="user">Cleaning</button></li>
-                    <li><button class="dropdown-item" type="button" name="business">Plumbing</button></li>
-                    <li><button class="dropdown-item" type="button" name="business">Electrical</button></li>
-                    <li><button class="dropdown-item" type="button" name="business">Improvements</button></li>
-                    <li><button class="dropdown-item" type="button" name="business">Landscape</button></li>
-                </ul>
-            </div>
+            
             <div class="col-xl-4 px-2">
-                <input class="form-control me-2" type="search" placeholder="Search" name="searchText">
+                <input class="form-control me-2" type="search" placeholder="Search by name" name="searchText">
             </div>
             <div>
-                <button class="btn" type="submit">Search</button>
+                <button class="btn btn-success" type="submit" value="textSearch">Search</button>
+            </div>
+            
+        </form>
+    </div>
+    <h4 class="row justify-content-center mb-4">Search by category</h4>
+    <div class="row  justify-content-center">
+        <form method="POST" action="{% url 'searchResults' %}">
+            {% csrf_token %}
+            <div>
+                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="cleanSearch">Cleaning</button>
+                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="plumbingSearch">Plumbing</button>
+                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="electricalSearch">Electrical</button>
+                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="improvementSearch">Improvements</button>
+                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="landscapeSearch">Landscape</button>
             </div>
         </form>
     </div>

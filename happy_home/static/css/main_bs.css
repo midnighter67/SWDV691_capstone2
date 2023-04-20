@@ -42,3 +42,6 @@ footer {
 a .page-links {
   text-decoration: none;
 }
+.btn:hover{
+  background-color: #7F664A; 
+}
