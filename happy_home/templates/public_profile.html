@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+
+
+<div class="row justify-content-center d-flex pb-5">
+    <div class="col-md-2">
+        <p><small><a class="page-links"  style="text-decoration: none;" href="#">Request a Quote</a></small></p> 
+    </div>
+</div>
+<div class="row">
+    <div class="container-bordered border border-dark rounded-2 col-md-8 p-2 d-flex justify-content-center">
+        <div class="row mx-2">
+            <div class="row mb-3">
+                <h1  class="col-6"><strong>{{ profile.name }}</strong></h1>
+                <span class="col-3" style="font-size:200%">&starf;&starf;</span>
+              
+            </div>
+            <div class="row">
+                <h5 class="col-3">Point of Contact: </h5> 
+                <h5 class="col-4">{{profile.poc_first}} {{profile.poc_last}}</h5>
+            </div>
+            <div class="row">
+                <h5 class="col-3">Web Address: </h5> 
+                <h5 class="col-4"><small>{{profile.url}}</small></h5>
+            </div>
+            <div class="row">
+                <h5 class="col-3">Email: </h5> 
+                <h5 class="col-4">{{profile.email}}</h5>
+            </div>
+            <div class="row">
+                <h5 class="col-3">Phone: </h5> 
+                <h5 class="col-4">{{profile.phone}}</h5>
+            </div>
+            <div class="row">
+                <h5 class="col-3">Business Location: </h5> 
+                <h5 class="col-4">{{profile.zip}}</h5>
+            </div>
+            <h5 class="pt-4 pb-2">About {{profile.name}}</h5>
+            
+                <textarea class="col-8" rows="6">{{ profile.description }}</textarea>
+          
+        </div>
+    </div>
+</div>
+    
+
+
+
+
+
+
+{% endblock %}

@@ -12,11 +12,13 @@ from django.contrib import messages
 
 def home(request):
     """ Initial landing page that also hosts the search funtion """
+    """
     if request.method == 'GET':
         message = "Hello World"
     else:
         message = "Hello World!"
-    return render(request, 'home.html', {'message':message})
+    """
+    return render(request, 'home.html', {})
 
 def login_user(request):
     """ User authentication for both user and provider"""
@@ -138,6 +140,11 @@ def search_results(request):
     else:
         return render(request, 'home.html', {})
     
+def public_profile(request, result_id): #result_id
+    profile = Provider.objects.get(pk=result_id)
+    return render(request, 'public_profile.html', {'profile':profile})
+
+
 """   
 def user_reviews(request):
     if request.method == "POST":

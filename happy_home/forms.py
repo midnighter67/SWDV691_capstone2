@@ -211,12 +211,11 @@ class BusinessProfileForm(ModelForm):
         self.fields['electrical'].widget.attrs['class'] = 'form-check-input'
         self.fields['improvement'].widget.attrs['class'] = 'form-check-input'
         self.fields['landscape'].widget.attrs['class'] = 'form-check-input'
-"""
-        self.fields['cleaning'].widget.attrs['type'] = 'checkbox'
-        self.fields['cleaning'].widget.attrs['value'] = ''
-        self.fields['cleaning'].widget.attrs['id'] = 'flexCheckDefault'
-        self.fields['cleaning'].label = 'Cleaning'
-"""  
+
+class PublicProfileForm(forms.Form):
+    class Meta:
+        fields = ('name')
+
 
 class RatingForm(forms.ModelForm):
     class Meta:
