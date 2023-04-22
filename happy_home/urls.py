@@ -11,4 +11,5 @@ urlpatterns = [
     path('business_profile', views.edit_profile, name='businessProfile'),
     path('search_results', views.search_results, name='searchResults'),
     path('public_profile<result_id>', views.public_profile, name='publicProfile'), #/<result_id>
+    path('review<profile_id>', views.review, name='review'),
 ]

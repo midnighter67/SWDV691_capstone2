@@ -144,6 +144,16 @@ def public_profile(request, result_id): #result_id
     profile = Provider.objects.get(pk=result_id)
     return render(request, 'public_profile.html', {'profile':profile})
 
+def review(request, profile_id):
+    if request.user.is_authenticated:
+        profile = Provider.objects.get(pk=profile_id)
+        return render(request, 'review.html', {'profile':profile})
+    else:
+        messages.success(request, ('You must be logged in to leave a review'))
+        return redirect('review')
+
+
+
 
 """   
 def user_reviews(request):
