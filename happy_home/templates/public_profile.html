@@ -11,7 +11,7 @@
         <p><small><a class="page-links"  style="text-decoration: none;" href="#">Request a Quote</a></small></p> 
     </div>
     <div class="col-md-2">
-        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'review' profile.id %}">Rate This Business</a></small></p> 
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'review' profile.user %}">Rate This Business</a></small></p> 
     </div>
 </div>
 <div class="row">
@@ -20,8 +20,22 @@
             <div class="row mb-3">
                 <h1  class="col-6"><strong>{{ profile.name }}</strong></h1>
                 <!--<span class="col-3" style="font-size:200%">&starf;&starf;</span>-->
-                <i style='font-size:24px' class='fas col-3 pt-3'>&#xf005;&#xf005;&#xf089;</i>
-              
+                {% if stats.floor == 1 %}
+                    <i style='font-size:24px' class='fas col-1 pt-3'>&#xf005;</i>  
+                {% elif stats.floor == 2 %}
+                    <i style='font-size:24px' class='fas col-1 pt-3'>&#xf005;&#xf005;</i>
+                {% elif stats.floor == 3 %}
+                    <i style='font-size:24px' class='fas col-2 pt-3'>&#xf005;&#xf005;&#xf005;</i>
+                {% elif stats.floor == 4 %}
+                    <i style='font-size:24px' class='fas col-2 pt-3'>&#xf005;&#xf005;&#xf005;&#xf005;</i>
+                {% elif stats.floor == 5 %}
+                    <i style='font-size:24px' class='fas col-2 pt-3'>&#xf005;&#xf005;&#xf005;&#xf005;&#xf005;</i>
+                {% endif %}
+                {% if stats.half == 1 %}
+                    <i style='font-size:24px' class='fas col-1 pt-3'>&#xf089;</i>
+                {% endif %}
+                    <h7 class="col-2 pt-3"><small>avg {{stats.average}} ({{stats.index}})</small></h7>
+             
             </div>
             <div class="row">
                 <h5 class="col-3">Point of Contact: </h5> 

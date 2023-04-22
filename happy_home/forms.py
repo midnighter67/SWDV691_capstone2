@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import User, Provider, Consumer, Rating
+from .models import User, Provider, Consumer, Rating, Review
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 
@@ -221,6 +221,11 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = ('title', 'rating', 'text')
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('title', 'text', 'rating')
 
 
 """

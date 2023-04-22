@@ -10,6 +10,7 @@ urlpatterns = [
     path('user_profile', views.edit_profile, name='userProfile'),
     path('business_profile', views.edit_profile, name='businessProfile'),
     path('search_results', views.search_results, name='searchResults'),
-    path('public_profile<result_id>', views.public_profile, name='publicProfile'), #/<result_id>
-    path('review<profile_id>', views.review, name='review'),
+    path('public_profile<result_user>', views.public_profile, name='publicProfile'), #/<result_id>
+    path('review<profile_user>', views.review, name='review'),
+    # path('review<profile_id>', views.submitReview, name='submitReview'),
 ]

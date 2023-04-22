@@ -3,9 +3,10 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 # from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 # from django.http import HttpResponse
 # from django.http import HttpRequest
-from .models import Provider, Consumer, Rating
-from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm
+from .models import Provider, Consumer, Rating, Review
+from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, RatingForm
 from django.contrib import messages
+import math
 # import json
 
 # Create your views here.
@@ -18,6 +19,7 @@ def home(request):
     else:
         message = "Hello World!"
     """
+    print("home")
     return render(request, 'home.html', {})
 
 def login_user(request):
@@ -56,12 +58,17 @@ def register(request):
             provider = form.cleaned_data['is_provider']
             consumer = form.cleaned_data['is_user']
             email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
             if provider ^ consumer:
                 form.save() # user = form.save()
+                user = authenticate(request, username=username, password=password)
+                login(request, user)
                 if provider:
                     post = Provider()
                 else:
                     post = Consumer()
+                post.user = request.user.id
                 post.email = email
                 post.save()
                 messages.success(request, ('Your account has been registered.  Please login.'))
@@ -140,18 +147,78 @@ def search_results(request):
     else:
         return render(request, 'home.html', {})
     
-def public_profile(request, result_id): #result_id
-    profile = Provider.objects.get(pk=result_id)
-    return render(request, 'public_profile.html', {'profile':profile})
-
-def review(request, profile_id):
-    if request.user.is_authenticated:
-        profile = Provider.objects.get(pk=profile_id)
-        return render(request, 'review.html', {'profile':profile})
+def public_profile(request, result_user): #result_id
+    profile = Provider.objects.get(user=result_user)
+    reviews = Review.objects.filter(provider=result_user)
+    stats = {}
+    total = 0
+    index = 0
+    floor = 0
+    half = 0
+    for review in reviews:
+        index = index + 1
+        total = total + review.rating
+    if index == 0:
+        average = 0
     else:
-        messages.success(request, ('You must be logged in to leave a review'))
-        return redirect('review')
+        average = round(total/index,1)
+    floor = math.floor(average)
+    if (.7 > average - floor < floor + 1):
+        floor = floor + 1
+        half = 0
+    elif (.3 >= average - floor <= .7):
+        half = 1
+    stats['average'] = average
+    stats['floor'] = floor
+    stats['half'] = half
+    stats['index'] = index + 1
+    
+    return render(request, 'public_profile.html', {'profile':profile, 'stats':stats})
 
+def review(request, profile_user):
+    url = request.META.get('HTTP_REFERER')
+    if request.user.is_authenticated:
+        current = Consumer.objects.get(email=request.user.email)
+        if request.method == "POST":
+            try:
+                reviews = Review.objects.get(consumer=current.user, provider=profile_user)
+                form = ReviewForm(request.POST, instance=reviews)
+                form.save()
+                messages.success(request, ('Review updated'))
+                return redirect('home')
+            except Review.DoesNotExist:
+                form = ReviewForm(request.POST)
+                if form.is_valid():
+                    data = Review()
+                    data.title = form.cleaned_data['title']
+                    data.rating = form.cleaned_data['rating']
+                    data.text = form.cleaned_data['text']
+                    
+                    data.provider = profile_user
+                    data.consumer = current.user
+                    data.save()
+                   
+                    messages.success(request, ('Review saved'))
+                    return redirect('login')
+        else:
+            profile = Provider.objects.get(user=profile_user)
+            return render(request, 'review.html', {'profile':profile})
+    else:
+        print("oops")
+        messages.success(request, ('You must be logged in to leave a review'))
+        profile = Provider.objects.get(user=profile_user)
+        return render(request, 'public_profile.html', {'profile':profile} )
+    
+
+
+"""
+if request.method == "POST":
+            if request.user.is_authenticated:
+                profile = Provider.objects.get(pk=profile_id)
+                return render(request, 'review.html', {'profile':profile})
+        else:
+            return render(request, 'review.html', {'profile':profile})
+"""
 
 
 
