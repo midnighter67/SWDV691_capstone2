@@ -163,10 +163,11 @@ def public_profile(request, result_user): #result_id
     else:
         average = round(total/index,1)
     floor = math.floor(average)
-    if (.7 > average - floor < floor + 1):
+    x = average - floor
+    if (x > 0.7):
         floor = floor + 1
         half = 0
-    elif (.3 >= average - floor <= .7):
+    elif (x >= 0.3 and x <= 0.7):
         half = 1
     stats['average'] = average
     stats['floor'] = floor

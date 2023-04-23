@@ -7,27 +7,38 @@
 <div class="row">
     <h3 class="mb-3 pb-2" style="text-align: center">{{ profile.name }}</h3>
     <h6 class="mb-1" style="text-align: center">rate this business</h6>
-    <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto">
+    <div class="container-bordered border border-dark rounded-2 col-md-5 pb-5 px-5 mx-auto">
         <form method="POST" action="{% url 'review' profile.user %}"> <!-- url 'submitReview' profile.id -->
             {% csrf_token %}
-            <div class="rate">
-                <input type="radio" name="rating" id="rating10" value="5" required/> <label for="rating10" title="5"></label>
-                <input type="radio" name="rating" id="rating9" value="4.5" required/><label for="rating9" title="4.5" class="half"></label>
-                <input type="radio" name="rating" id="rating8" value="4" required/>  <label for="rating8" title="4"></label>
-                <input type="radio" name="rating" id="rating7" value="3.5" required/><label for="rating7" title="3.5" class="half"></label>
-                <input type="radio" name="rating" id="rating6" value="3" required/>  <label for="rating6" title="3"></label>
-                <input type="radio" name="rating" id="rating5" value="2.5" required/><label for="rating5" title="2.5" class="half"></label>
-                <input type="radio" name="rating" id="rating4" value="2" required/>  <label for="rating4" title="2"></label>
-                <input type="radio" name="rating" id="rating3" value="1.5" required/><label for="rating3" title="1.5" class="half"></label>
-                <input type="radio" name="rating" id="rating2" value="1" required/>  <label for="rating2" title="1"></label>
-                <input type="radio" name="rating" id="rating1" value="0.5" required/><label for="rating1" title="0.5" class="half"></label>
+            <div class="row col-5 mb-4 pt-3 mx-auto">
+                <div class="rate">
+                    <input type="radio" name="rating" id="rating10" value="5" required/> <label for="rating10" title="5"></label>
+                    <input type="radio" name="rating" id="rating9" value="4.5" required/><label for="rating9" title="4.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating8" value="4" required/>  <label for="rating8" title="4"></label>
+                    <input type="radio" name="rating" id="rating7" value="3.5" required/><label for="rating7" title="3.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating6" value="3" required/>  <label for="rating6" title="3"></label>
+                    <input type="radio" name="rating" id="rating5" value="2.5" required/><label for="rating5" title="2.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating4" value="2" required/>  <label for="rating4" title="2"></label>
+                    <input type="radio" name="rating" id="rating3" value="1.5" required/><label for="rating3" title="1.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating2" value="1" required/>  <label for="rating2" title="1"></label>
+                    <input type="radio" name="rating" id="rating1" value="0.5" required/><label for="rating1" title="0.5" class="half"></label>
+                </div>
             </div>
-
-            Review Title:
-            <input type="text" class="form-control" name="title"><br/>
-            Review:
-            <textarea name="text" rows="5" class="form-control"></textarea>
-            <input type="submit" value="Submit Review" class="btn btn-primary">
+            <div class="row">
+                <h6>Title:</h6>
+            </div>
+            <div class="row mb-3">
+                <input type="text" class="form-control" name="title"><br/>
+            </div>
+            <div class="row">
+                <h6>Review:</h6>
+            </div>
+            <div class="row mb-3">
+                <textarea name="text" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="row col-2 mx-auto">
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </div>
 </form>
 
         </form>
