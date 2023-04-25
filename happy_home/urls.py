@@ -12,5 +12,7 @@ urlpatterns = [
     path('search_results', views.search_results, name='searchResults'),
     path('public_profile<result_user>', views.public_profile, name='publicProfile'), #/<result_id>
     path('review<profile_user>', views.review, name='review'),
+    path('business_reviews<info_user>', views.business_reviews, name='businessReviews'),
+    path('reply<review_id>', views.reply, name='reply'),
     # path('review<profile_id>', views.submitReview, name='submitReview'),
 ]

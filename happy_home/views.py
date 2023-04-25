@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 # from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 # from django.http import HttpResponse
 # from django.http import HttpRequest
-from .models import Provider, Consumer, Rating, Review
-from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, RatingForm
+from .models import Provider, Consumer, Reply, Review
+from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, ReplyForm
 from django.contrib import messages
 import math
 # import json
@@ -112,7 +112,7 @@ def edit_profile(request):
             messages.success(request, ('Profile Updated'))
             # return redirect('user_profile')
     if provider:
-        context = {'business_profile_form': form}
+        context = {'business_profile_form': form, 'info': info}
         route = 'business_profile.html'
     else:
         context = {'user_profile_form': form}
@@ -205,11 +205,49 @@ def review(request, profile_user):
             profile = Provider.objects.get(user=profile_user)
             return render(request, 'review.html', {'profile':profile})
     else:
-        print("oops")
         messages.success(request, ('You must be logged in to leave a review'))
         profile = Provider.objects.get(user=profile_user)
         return render(request, 'public_profile.html', {'profile':profile} )
     
+
+def reply(request, review_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == "POST":
+        try:
+            reply = Reply.objects.get(review__id=review_id)
+            form = ReplyForm(request.POST, instance=reply)
+            form.save()
+            messages.success(request, 'Your reply has been updated')
+            return redirect(url)
+        except Reply.DoesNotExist:
+            form = ReplyForm(request.POST)
+            if form.is_valid():
+                data = Reply()
+                data.review_id = review_id
+                data.text = form.cleaned_data['text']
+                data.save()
+                messages.success(request, 'Your reply has been saved')
+                return redirect(url)
+    else:
+        messages.success(request, 'GET')
+        review = Review.objects.get(id=review_id)
+        return render(request, 'reply.html', {'review':review})
+
+
+def business_reviews(request, info_user):
+    if request.user.is_authenticated:
+        if request.user.is_provider:
+            provider = Provider.objects.get(user=info_user) #(email=request.user.email)
+            reviews = Review.objects.filter(provider=info_user)
+            return render(request, 'business_reviews.html', {'reviews':reviews, 'provider': provider} ) # ,'profile_user':profile_user
+        else:
+            pass
+    else:
+        messages.success(request, ('You must be logged in to get review list'))
+        return redirect('login')
+    
+
+        
 
 
 """

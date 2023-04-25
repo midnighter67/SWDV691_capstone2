@@ -7,7 +7,7 @@
 
 <div class="row d-flex justify-content-center pb-5">
     <div class="col-md-1">
-        <p><small><a class="page-links"  style="text-decoration: none;" href="#">reviews</a></small></p> <!-- url 'businessReviews' -->
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'businessReviews' info.user %}">reviews</a></small></p> 
     </div>
     <div class="col-md-2">
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import User, Provider, Consumer, Rating, Review
+from .models import User, Provider, Consumer, Reply, Review
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 
@@ -217,15 +217,15 @@ class PublicProfileForm(forms.Form):
         fields = ('name')
 
 
-class RatingForm(forms.ModelForm):
-    class Meta:
-        model = Rating
-        fields = ('title', 'rating', 'text')
-
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('title', 'text', 'rating')
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ('text',)
 
 
 """
@@ -234,6 +234,12 @@ class CategoryForm(forms.Form):
         fields = ('cleaning', 'plumbing', 'electrical', 'improvement', 'landscape')
 """
  
+"""
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ('title', 'rating', 'text')
+"""
 
 
 

@@ -53,7 +53,7 @@ class Consumer(models.Model):
     def __str__(self):
         return self.first + " " + self.last
     
-
+"""
 class Rating(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     user = models.ForeignKey(Consumer, on_delete=models.CASCADE)
@@ -64,7 +64,7 @@ class Rating(models.Model):
 
     def __str__(self):
         return self.provider + ":  " + self.title
-
+"""
 
 class Review(models.Model):
     provider = models.IntegerField(null=True)
@@ -76,6 +76,14 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Reply(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    text = models.CharField(max_length=1000, default="")
+
+    class Meta:
+        verbose_name = 'Reply'
+        verbose_name_plural = 'Replies'
 
 
 
