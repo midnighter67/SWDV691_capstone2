@@ -13,6 +13,8 @@ urlpatterns = [
     path('public_profile<result_user>', views.public_profile, name='publicProfile'), #/<result_id>
     path('review<profile_user>', views.review, name='review'),
     path('business_reviews<info_user>', views.business_reviews, name='businessReviews'),
+    path('user_reviews<info_user>', views.user_reviews, name='userReviews'),
     path('reply<review_id>', views.reply, name='reply'),
+    path('quote<profile_id>', views.quote, name='quote'),
     # path('review<profile_id>', views.submitReview, name='submitReview'),
 ]

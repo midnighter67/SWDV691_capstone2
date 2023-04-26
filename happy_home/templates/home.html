@@ -16,18 +16,20 @@
             
         </form>
     </div>
-    <h4 class="row justify-content-center mb-4">Search by category</h4>
-    <div class="row  justify-content-center">
-        <form method="POST" action="{% url 'searchResults' %}">
-            {% csrf_token %}
-            <div>
-                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="cleanSearch">Cleaning</button>
-                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="plumbingSearch">Plumbing</button>
-                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="electricalSearch">Electrical</button>
-                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="improvementSearch">Improvements</button>
-                <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="landscapeSearch">Landscape</button>
-            </div>
-        </form>
+    <h4 class="row mb-4 justify-content-center ">Search by category</h4>
+    <div class="row text-center">
+        <div class="container col-md-12 pb-5">
+            <form method="POST" action="{% url 'searchResults' %}">
+                {% csrf_token %}
+                <div>
+                    <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="cleanSearch">Cleaning</button>
+                    <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="plumbingSearch">Plumbing</button>
+                    <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="electricalSearch">Electrical</button>
+                    <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="improvementSearch">Improvements</button>
+                    <button type="submit" class="btn btn-success btn-lg col-md-2 mx-2" style="width: 10em" name="landscapeSearch">Landscape</button>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="row mb-5"></div>
     <div class="row mb-5"></div>

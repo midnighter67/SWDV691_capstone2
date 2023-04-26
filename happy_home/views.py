@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 # from django.http import HttpResponse
 # from django.http import HttpRequest
 from .models import Provider, Consumer, Reply, Review
-from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, ReplyForm
+from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, ReplyForm, QuoteForm
 from django.contrib import messages
+from django.core.mail import send_mail
+from smtplib import SMTPException
 import math
 # import json
 
@@ -71,11 +73,14 @@ def register(request):
                 post.user = request.user.id
                 post.email = email
                 post.save()
-                messages.success(request, ('Your account has been registered.  Please login.'))
+                messages.success(request, ('Account registered successfully.'))
             else:
                 messages.success(request, ('Please select only one account, business or user.'))
                 return redirect('createAccount')
-            return redirect('login')
+            if provider:
+                return redirect('businessProfile')
+            else:
+                return redirect('userProfile')
         else:
             messages.success(request, ('Form invalid.  Must be business or user.'))
     else:
@@ -115,7 +120,7 @@ def edit_profile(request):
         context = {'business_profile_form': form, 'info': info}
         route = 'business_profile.html'
     else:
-        context = {'user_profile_form': form}
+        context = {'user_profile_form': form, 'info': info}
         route = 'user_profile.html'
     return render(request, route, context) # {'info': info, 'form': form}
 
@@ -241,11 +246,58 @@ def business_reviews(request, info_user):
             reviews = Review.objects.filter(provider=info_user)
             return render(request, 'business_reviews.html', {'reviews':reviews, 'provider': provider} ) # ,'profile_user':profile_user
         else:
-            pass
+            messages.success(request, ('You must be logged in as a business'))
+            return redirect('login')
     else:
         messages.success(request, ('You must be logged in to get review list'))
         return redirect('login')
     
+def user_reviews(request, info_user):
+    if request.user.is_authenticated:
+        if request.user.is_user:
+            consumer = Consumer.objects.get(user=info_user) #(email=request.user.email)
+            reviews = Review.objects.filter(consumer=info_user)
+            return render(request, 'user_reviews.html', {'reviews':reviews, 'consumer': consumer} ) # ,'profile_user':profile_user
+        else:
+            messages.success(request, ('You must be logged in as a user'))
+            return redirect('login')
+    else:
+        messages.success(request, ('You must be logged in to get review list'))
+        return redirect('login')
+    
+def quote(request, profile_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.user.is_authenticated:
+        if request.user.is_user:
+            provider = Provider.objects.get(user=profile_id)
+            consumer = Consumer.objects.get(email=request.user.email)
+            if request.method == "POST":
+                form = QuoteForm(request.POST or None)
+                if form.is_valid():
+                    try:
+                        msg = form.cleaned_data.get('text')
+                        send_mail(
+                            "Happy Home Quote Request",
+                            msg,
+                            consumer.email,
+                            [provider.email],
+                            fail_silently=False,
+                        )
+                        messages.success(request, ('Request sent successfully!'))
+                    except SMTPException:
+                        messages.success(request, ('You must be logged in to get review list'))
+                        return redirect(url)
+                else:
+                    messages.success(request, ('Form is invalid'))
+                    return redirect('quote')
+            else:
+                return render(request, 'quote.html', {'consumer':consumer, 'provider': provider} )
+        else:
+            messages.success(request, ('You must be logged in as a user to request a quote'))
+            return redirect('login')
+    else:
+        messages.success(request, ('You must be logged in to request a quote'))
+        return redirect('login')
 
         
 

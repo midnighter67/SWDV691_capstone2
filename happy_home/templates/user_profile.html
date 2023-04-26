@@ -7,7 +7,7 @@
 
 <div class="row d-flex justify-content-center pb-5">
     <div class="col-md-1">
-        <p><small><a class="page-links"  style="text-decoration: none;" href="#">reviews</a></small></p> <!-- url 'userReviews' -->
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'userReviews' info.user %}">reviews</a></small></p> 
     </div>
     <div class="col-md-2">
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 
@@ -39,7 +39,7 @@
     </div>
 
     <div class="col-md-1"></div>
-
+<!--
     <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto my-auto">
 
         <form method="POST"> 
@@ -65,8 +65,9 @@
 
 
     </div>
+-->
 </div> <!-- row -->
 <br/><br/>
-<p><small><a href="#">Click Here</a> To change your password</small></p><br/> <!-- url 'changePassword' -->
+
     
 {% endblock %}

@@ -227,6 +227,10 @@ class ReplyForm(forms.ModelForm):
         model = Reply
         fields = ('text',)
 
+class QuoteForm(forms.Form):
+    class Meta:
+        fields = ('text',)
+
 
 """
 class CategoryForm(forms.Form):

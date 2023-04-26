@@ -4,6 +4,13 @@
 
 {% block content %}
 
+<div class="row col-6 mx-auto">
+    <h2 style="text-align: center">Reviews for</h2>
+</div>
+<div class="row col-6 mx-auto mb-5">
+    <h1 style="text-align: center"><strong>{{ provider.name }}</strong></h1>
+</div>
+{% for review in reviews %}
 <div class="row text-center">
     <div class="container-bordered border border-dark rounded-2 mb-5 text-center col-5 mx-auto">
         <!--
@@ -36,34 +43,20 @@
             {% endif %} 
         </div>
         <div class="mb-3">
-            <h3>{{ review.title }}</h3>
+            <h3>{{ review.title }} - {{ review.id }}</h3>
         </div>
         <div class="col-5 mx-auto mb-4">
             <p>{{ review.text }}</p>
         </div>
+        
     </div>
         
         
-</div>
-<div class="row">
-    <h3 class="mb-3 pb-2" style="text-align: center">{{ profile.name }}</h3>
-    <div class="container col-md-5 pb-5 px-5 mx-auto">
-        <h6>Your reply:</h6>
-        <form method="POST" action="#"> 
-            {% csrf_token %}
-            <div class="row mb-3">
-                <textarea name="text" rows="5" class="form-control"></textarea>
-            </div>
-            <div class="row col-2 mx-auto">
-                <input type="submit" value="Submit" class="btn btn-primary">
-            </div>
-        </form>
-    </div>
 </div>
 
+{% endfor %}
+            
 
 
 
 {% endblock %}
-
-
