@@ -152,7 +152,8 @@ AUTH_USER_MODEL = 'happy_home.User'
 # EMAIL_HOST_USER = 'chetley3@yahoo.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.yahoo.com'
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
