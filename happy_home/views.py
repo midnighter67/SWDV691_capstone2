@@ -283,7 +283,7 @@ def quote(request, profile_id):
                         send_mail(
                             "Happy Home Quote Request",
                             msg,
-                            settings.EMAIL_HOST_USER,
+                            'chetley3@yahoo.com',
                             [provider.email],
                             fail_silently=False,
                         )
