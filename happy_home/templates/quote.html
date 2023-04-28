@@ -13,17 +13,24 @@
             <h4>To:  {{ provider.name }}</h4>
         </div>
         <div class="mb-5">
-            <h5>     {{ provider.email }}</h5>
+            <h5>{{ provider.email }}</h5>
+        </div>
+        <div class="mb-3">
+            <h4>From:  {{ user.username }}</h4>
+        </div>
+        <div class="mb-5">
+            <h5>{{ user.email }}</h5>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="container col-md-5 pb-5 px-5 mx-auto">
         <h7>Provide details about your request:</h7>
-        <form method="POST"> <!-- action="url 'quote' provider.user -->
+        <form method="POST" action="#"> <!-- action="url 'quote' provider.user -->
             {% csrf_token %}
             <div class="row mb-3">
-                <textarea name="text" rows="5" class="form-control"></textarea>
+                <!--<textarea name="text" rows="5" class="form-control"></textarea>-->
+                <textarea type="text" rows="5" name="text" placeholder=" "></textarea>
             </div>
             <div class="row col-2 mx-auto">
                 <input type="submit" value="Submit" class="btn btn-primary">

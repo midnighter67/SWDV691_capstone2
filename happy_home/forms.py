@@ -228,8 +228,15 @@ class ReplyForm(forms.ModelForm):
         fields = ('text',)
 
 class QuoteForm(forms.Form):
-    class Meta:
-        fields = ('text',)
+    text = forms.CharField(
+        widget= forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": "5"
+            }
+        )
+    )
+    
 
 
 """

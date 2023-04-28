@@ -6,12 +6,15 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from .models import Provider, Consumer, Reply, Review
 from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, ReplyForm, QuoteForm
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+
 from smtplib import SMTPException
 import math
 # import json
 
 # Create your views here.
+EMAIL = 'happyhome80831@gmail.com'
 
 def home(request):
     """ Initial landing page that also hosts the search funtion """
@@ -272,24 +275,26 @@ def quote(request, profile_id):
             provider = Provider.objects.get(user=profile_id)
             consumer = Consumer.objects.get(email=request.user.email)
             if request.method == "POST":
-                form = QuoteForm(request.POST or None)
+                form = QuoteForm(request.POST)
                 if form.is_valid():
                     try:
-                        msg = form.cleaned_data.get('text')
+                        text = form.cleaned_data.get('text') 
+                        msg = text + "\n\n" + consumer.first + " " + consumer.last + "\n" + consumer.email
                         send_mail(
                             "Happy Home Quote Request",
                             msg,
-                            consumer.email,
+                            settings.EMAIL_HOST_USER,
                             [provider.email],
                             fail_silently=False,
                         )
                         messages.success(request, ('Request sent successfully!'))
+                        return redirect(url)
                     except SMTPException:
                         messages.success(request, ('You must be logged in to get review list'))
                         return redirect(url)
                 else:
-                    messages.success(request, ('Form is invalid'))
-                    return redirect('quote')
+                    messages.success(request, ('Submit failed.  A message to ' + provider.name + ' is required'))
+                    return render(request, 'quote.html', {"provider":provider} )
             else:
                 return render(request, 'quote.html', {'consumer':consumer, 'provider': provider} )
         else:
