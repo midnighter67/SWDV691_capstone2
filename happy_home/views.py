@@ -14,7 +14,7 @@ import math
 # import json
 
 # Create your views here.
-EMAIL = 'happyhome80831@gmail.com'
+
 
 def home(request):
     """ Initial landing page that also hosts the search funtion """
