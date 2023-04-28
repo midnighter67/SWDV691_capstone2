@@ -14,6 +14,10 @@ from pathlib import Path
 import django_heroku
 from decouple import config
 import dj_database_url
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +29,7 @@ ROOT_PATH =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -147,6 +151,6 @@ AUTH_USER_MODEL = 'happy_home.User'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.yahoo.com'
 EMAIL_PORT = 587 
-EMAIL_HOST_USER = '' # config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = '' # config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
