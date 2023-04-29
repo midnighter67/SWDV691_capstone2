@@ -29,7 +29,7 @@ ROOT_PATH =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
