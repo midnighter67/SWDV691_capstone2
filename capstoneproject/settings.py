@@ -14,17 +14,17 @@ from pathlib import Path
 import django_heroku
 from decouple import config, RepositoryEnv
 import dj_database_url
-import environ
+# import environ
 
-env = environ.Env()
-environ.Env.read_env()
+# env = environ.Env()
+# environ.Env.read_env()
 
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_PATH =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-config = config(RepositoryEnv(".env"))
+# config = config(RepositoryEnv(".env"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -135,8 +135,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-# STATIC_URL = 'static/'
+# STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(ROOT_PATH, 'static')
 ]
