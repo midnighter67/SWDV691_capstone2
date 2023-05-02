@@ -45,7 +45,7 @@ def logout_user(request):
     """ Logout registered authenticated users and businesses """
     logout(request)
     messages.success(request, ('You have been logged out'))
-    return redirect('home')
+    return redirect('login')
 
 def register(request):
     """ register account for both user and business using a role field """
@@ -169,7 +169,7 @@ def search_results(request):
     else:
         return render(request, 'home.html', {})
     
-def public_profile(request, result_user): #result_id
+def public_profile(request, result_user): 
     """ display business data including review average """
     profile = Provider.objects.get(user=result_user)
     reviews = Review.objects.filter(provider=result_user)
@@ -225,8 +225,7 @@ def review(request, profile_user):
                     data.save()
                    
                     messages.success(request, ('Review saved'))
-                    # return redirect('url')
-            return render(request, 'review.html', {'profile':profile})
+            return redirect('publicProfile', profile_user)
         else:
             return render(request, 'review.html', {'profile':profile})
     else:
@@ -238,6 +237,7 @@ def review(request, profile_user):
 def reply(request, review_id):
     """ save reply text in response to a review that was left by a registered user """
     url = request.META.get('HTTP_REFERER')
+    reply = 0
     if request.method == "POST":
         try:
             reply = Reply.objects.get(review__id=review_id)
@@ -255,9 +255,12 @@ def reply(request, review_id):
                 messages.success(request, 'Your reply has been saved')
                 return redirect(url)
     else:
-        messages.success(request, 'GET')
         review = Review.objects.get(id=review_id)
-        return render(request, 'reply.html', {'review':review})
+        try:
+            reply = Reply.objects.get(review__id=review_id)
+        except Reply.DoesNotExist:
+            reply = 0
+        return render(request, 'reply.html', {'review':review, 'reply':reply})
 
 
 def business_reviews(request, info_user):
@@ -267,14 +270,20 @@ def business_reviews(request, info_user):
             provider = Provider.objects.get(user=info_user) 
             reviews = Review.objects.filter(provider=info_user)
             users = []
+            replies = []
             for review in reviews:
+                try:
+                    reply = Reply.objects.get(review__id=review.id)
+                except Reply.DoesNotExist:
+                    reply = 0
                 try:
                     consumer = Consumer.objects.get(user=review.consumer)
                     name = consumer.first + " " + consumer.last
                 except Consumer.DoesNotExist:
                     name = "deleted account"
                 users.append(name)
-            data = zip(reviews, users)
+                replies.append(reply)
+            data = zip(reviews, users, replies)
             return render(request, 'business_reviews.html', {'data':data, 'provider': provider} ) 
         else:
             messages.success(request, ('You must be logged in as a business'))
@@ -290,11 +299,17 @@ def user_reviews(request, info_user):
             consumer = Consumer.objects.get(user=info_user) 
             reviews = Review.objects.filter(consumer=info_user)
             providers = []
+            replies = []
             for review in reviews:
                 provider = Provider.objects.get(user=review.provider)
+                try:
+                    reply = Reply.objects.get(review__id=review.id)
+                except Reply.DoesNotExist:
+                    reply = 0
                 name = provider.name
                 providers.append(name)
-            data = zip(reviews, providers)
+                replies.append(reply)
+            data = zip(reviews, providers, replies)
             return render(request, 'user_reviews.html', {'data':data, 'consumer': consumer} ) 
         else:
             messages.success(request, ('You must be logged in as a user'))

@@ -46,6 +46,14 @@
         
 </div>
 <div class="row">
+    {% if reply != 0 %}
+    <div class="mb-1 text-center">
+        <h5>Previous Reply:</h5>
+    </div>
+    <div class="mb-3 text-center">
+        <p>{{ reply.text }}</p>
+    </div>
+    {% endif %}
     <h3 class="mb-3 pb-2" style="text-align: center">{{ profile.name }}</h3>
     <div class="container col-md-5 pb-5 px-5 mx-auto">
         <h6>Your reply:</h6>

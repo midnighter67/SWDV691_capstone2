@@ -227,6 +227,7 @@ class ReplyForm(forms.ModelForm):
         model = Reply
         fields = ('text',)
 
+
 class QuoteForm(forms.Form):
     text = forms.CharField(
         widget= forms.Textarea(

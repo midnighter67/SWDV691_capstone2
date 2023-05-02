@@ -8,7 +8,7 @@
     <h2 style="text-align: center">Your Reviews</h2>
 </div>
 
-{% for review,provider in data %}
+{% for review, provider, reply in data %}
 <div class="row text-center">
     <div class="container-bordered border border-dark rounded-2 mb-5 text-center col-5 mx-auto">
         
@@ -46,6 +46,14 @@
         <div class="col-5 mx-auto mb-4">
             <p>{{ review.text }}</p>
         </div>
+        {% if reply != 0 %}
+            <div class="mb-3">
+                <h4>{{ provider }} replied:</h4>
+            </div>
+            <div class="col-5 mx-auto mb-4">
+                <p>{{ reply.text }}</p>
+            </div>
+        {% endif %}
         
     </div>
         
