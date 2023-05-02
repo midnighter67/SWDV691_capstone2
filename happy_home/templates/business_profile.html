@@ -12,6 +12,9 @@
     <div class="col-md-2">
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 
     </div>
+    <div class="col-md-2">
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'deleteAccount' user.username %}">delete account</a></small></p> 
+    </div>
 </div>
 <div class="row">
     <h3 class="mb-3" style="text-align: center">Update Profile</h3>
@@ -61,6 +64,9 @@
             <div class="mb-5">
                 <label for="FormControlInput11" class="form-label">Description</label>
                 {{ business_profile_form.description }}
+            </div>
+            <div class="mb-3">
+                <h6>Select all that apply:</h6>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="cleaning"  id="flexCheckChecked">{{ business_profile_form.cleaning }}</input>

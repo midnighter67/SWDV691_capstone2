@@ -6,17 +6,20 @@
 
 
 <div class="row d-flex justify-content-center pb-5">
-    <div class="col-md-1">
+    <div class="col-md-2">
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'userReviews' info.user %}">reviews</a></small></p> 
     </div>
     <div class="col-md-2">
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 
     </div>
+    <div class="col-md-2">
+        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'deleteAccount' user.username %}">delete account</a></small></p> 
+    </div>
 </div>
 <div class="row">
     <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto">
 
-        <form method="POST"> <!-- action="{% url 'userProfile' %}" -->
+        <form method="POST"> 
             {% csrf_token %}
             {% if form.errors %}
                 <div class="alert alert-warning alert-dismissable" role="alert">
@@ -39,33 +42,6 @@
     </div>
 
     <div class="col-md-1"></div>
-<!--
-    <div class="container-bordered border border-dark rounded-2 col-md-5 p-5 mx-auto my-auto">
-
-        <form method="POST"> 
-            {% csrf_token %}
-            {% if form.errors %}
-                <div class="alert alert-warning alert-dismissable" role="alert">
-                    
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>Errors:</p>
-                    {% for field in form %}
-                        {% if field.errors %}
-                            {{ field.errors }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-    
-            {{category_form.as_p }}
-            <input type="submit" value="Update" class="btn btn-secondary">
-        </form>
-
-
-    </div>
--->
 </div> <!-- row -->
 <br/><br/>
 

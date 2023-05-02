@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 # from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 # from django.http import HttpResponse
 # from django.http import HttpRequest
-from .models import Provider, Consumer, Reply, Review
+from .models import Provider, Consumer, Reply, Review, User
 from .forms import LoginForm, SignUpForm, UserProfileForm, BusinessProfileForm, UpdatePasswordForm, ReviewForm, ReplyForm, QuoteForm
 from django.contrib import messages
 from django.core.mail import send_mail, EmailMessage
@@ -18,13 +18,6 @@ import math
 
 def home(request):
     """ Initial landing page that also hosts the search funtion """
-    """
-    if request.method == 'GET':
-        message = "Hello World"
-    else:
-        message = "Hello World!"
-    """
-    print("home")
     return render(request, 'home.html', {})
 
 def login_user(request):
@@ -32,20 +25,20 @@ def login_user(request):
     form = LoginForm(request.POST or None)
     msg = None
     if request.method == 'POST':
-      if form.is_valid():
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None and user.is_provider:
-          login(request, user)
-          return redirect('home')
-        elif user is not None and user.is_user:
-          login(request, user)
-          return redirect('home')
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_provider:
+                login(request, user)
+                return redirect('home')
+            elif user is not None and user.is_user:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.success(request, ('Invalid username or password'))
         else:
-          msg = 'invalid credentials'
-      else:
-        msg = 'invalid form'
+            messages.success(request, ('Form is invalid'))
     return render(request, 'login.html', {'form':form, 'msg':msg})
 
 def logout_user(request):
@@ -90,6 +83,26 @@ def register(request):
         form = SignUpForm()
     return render(request,'create_account.html', {'form': form})
 
+def delete_account(request, user_username):
+    """ delete user account, consumer or provider record, and any provider reviews/replies """
+    if request.user.is_authenticated:
+        try:
+            registered_user = User.objects.get(username=user_username)
+            if request.user.is_provider:
+                provider = Provider.objects.get(user=request.user.id)
+                Review.objects.filter(provider=provider.user).delete()
+                Provider.objects.filter(user=request.user.id).delete()
+            else:
+                Consumer.objects.filter(user=request.user.id).delete()
+            logout(request)
+            registered_user.delete()
+            messages.success(request, ('Account deleted'))
+        except registered_user.DoesNotExist:
+            messages.success(request, ('Account does not exist'))
+        except Exception as e:
+            messages.success(request, ('Delete failed: ' + e.message))
+    return render(request,'home.html', {})
+
 def change_password(request):
     """ Update pass word for registered users, both user and business """
     if request.method == "POST":
@@ -128,6 +141,7 @@ def edit_profile(request):
     return render(request, route, context) # {'info': info, 'form': form}
 
 def search_results(request):
+    """ generate a list of businesses based on search text or chosen category """
     if request.method == "POST":
         if 'cleanSearch' in request.POST:
             results = Provider.objects.filter(cleaning=True)
@@ -156,6 +170,7 @@ def search_results(request):
         return render(request, 'home.html', {})
     
 def public_profile(request, result_user): #result_id
+    """ display business data including review average """
     profile = Provider.objects.get(user=result_user)
     reviews = Review.objects.filter(provider=result_user)
     stats = {}
@@ -185,16 +200,18 @@ def public_profile(request, result_user): #result_id
     return render(request, 'public_profile.html', {'profile':profile, 'stats':stats})
 
 def review(request, profile_user):
-    url = request.META.get('HTTP_REFERER')
+    """ Save review rating and text left by user """
+    # url = request.META.get('HTTP_REFERER')
     if request.user.is_authenticated:
         current = Consumer.objects.get(email=request.user.email)
+        profile = Provider.objects.get(user=profile_user)
         if request.method == "POST":
             try:
                 reviews = Review.objects.get(consumer=current.user, provider=profile_user)
                 form = ReviewForm(request.POST, instance=reviews)
                 form.save()
                 messages.success(request, ('Review updated'))
-                return redirect('home')
+                # return redirect('url')
             except Review.DoesNotExist:
                 form = ReviewForm(request.POST)
                 if form.is_valid():
@@ -208,9 +225,9 @@ def review(request, profile_user):
                     data.save()
                    
                     messages.success(request, ('Review saved'))
-                    return redirect('login')
+                    # return redirect('url')
+            return render(request, 'review.html', {'profile':profile})
         else:
-            profile = Provider.objects.get(user=profile_user)
             return render(request, 'review.html', {'profile':profile})
     else:
         messages.success(request, ('You must be logged in to leave a review'))
@@ -219,6 +236,7 @@ def review(request, profile_user):
     
 
 def reply(request, review_id):
+    """ save reply text in response to a review that was left by a registered user """
     url = request.META.get('HTTP_REFERER')
     if request.method == "POST":
         try:
@@ -243,11 +261,21 @@ def reply(request, review_id):
 
 
 def business_reviews(request, info_user):
+    """ generate a list of reviews for the logged in provider left by registered users """
     if request.user.is_authenticated:
         if request.user.is_provider:
-            provider = Provider.objects.get(user=info_user) #(email=request.user.email)
+            provider = Provider.objects.get(user=info_user) 
             reviews = Review.objects.filter(provider=info_user)
-            return render(request, 'business_reviews.html', {'reviews':reviews, 'provider': provider} ) # ,'profile_user':profile_user
+            users = []
+            for review in reviews:
+                try:
+                    consumer = Consumer.objects.get(user=review.consumer)
+                    name = consumer.first + " " + consumer.last
+                except Consumer.DoesNotExist:
+                    name = "deleted account"
+                users.append(name)
+            data = zip(reviews, users)
+            return render(request, 'business_reviews.html', {'data':data, 'provider': provider} ) 
         else:
             messages.success(request, ('You must be logged in as a business'))
             return redirect('login')
@@ -256,11 +284,18 @@ def business_reviews(request, info_user):
         return redirect('login')
     
 def user_reviews(request, info_user):
+    """ generate a list of reviews created by the logged in consumer for registered providers """
     if request.user.is_authenticated:
         if request.user.is_user:
-            consumer = Consumer.objects.get(user=info_user) #(email=request.user.email)
+            consumer = Consumer.objects.get(user=info_user) 
             reviews = Review.objects.filter(consumer=info_user)
-            return render(request, 'user_reviews.html', {'reviews':reviews, 'consumer': consumer} ) # ,'profile_user':profile_user
+            providers = []
+            for review in reviews:
+                provider = Provider.objects.get(user=review.provider)
+                name = provider.name
+                providers.append(name)
+            data = zip(reviews, providers)
+            return render(request, 'user_reviews.html', {'data':data, 'consumer': consumer} ) 
         else:
             messages.success(request, ('You must be logged in as a user'))
             return redirect('login')
@@ -269,6 +304,7 @@ def user_reviews(request, info_user):
         return redirect('login')
     
 def quote(request, profile_id):
+    """ send an email from the registered user requesting a quote from a registered provider """
     url = request.META.get('HTTP_REFERER')
     if request.user.is_authenticated:
         if request.user.is_user:
@@ -306,26 +342,30 @@ def quote(request, profile_id):
 
         
 
-
 """
-if request.method == "POST":
-            if request.user.is_authenticated:
-                profile = Provider.objects.get(pk=profile_id)
-                return render(request, 'review.html', {'profile':profile})
-        else:
-            return render(request, 'review.html', {'profile':profile})
-"""
-
-
-
-"""   
-def user_reviews(request):
-    if request.method == "POST":
-        mymethod = "post"
-    elif request.method == "GET":
-        mymethod = "get"
+if request.user.is_authenticated:
+    if request.user.is_user:
+        consumer = Consumer.objects.get(user=info_user) #(email=request.user.email)
+        reviews = Review.objects.filter(consumer=info_user)
+        return render(request, 'user_reviews.html', {'reviews':reviews, 'consumer': consumer} ) # ,'profile_user':profile_user
     else:
-        mymethod = "neither post nor get"
-    return render(request, 'user_reviews.html', {'mymethod':mymethod})
+        messages.success(request, ('You must be logged in as a user'))
+        return redirect('login')
+else:
+    messages.success(request, ('You must be logged in to get review list'))
+    return redirect('login')
 
+
+
+if request.user.is_authenticated:
+        if request.user.is_provider:
+            provider = Provider.objects.get(user=info_user) #(email=request.user.email)
+            reviews = Review.objects.filter(provider=info_user)
+            return render(request, 'business_reviews.html', {'reviews':reviews, 'provider': provider} ) # ,'profile_user':profile_user
+        else:
+            messages.success(request, ('You must be logged in as a business'))
+            return redirect('login')
+    else:
+        messages.success(request, ('You must be logged in to get review list'))
+        return redirect('login')
 """
