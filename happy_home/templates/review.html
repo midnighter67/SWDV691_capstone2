@@ -7,10 +7,10 @@
 <div class="row">
     <h3 class="mb-3 pb-2" style="text-align: center">{{ profile.name }}</h3>
     <h6 class="mb-1" style="text-align: center">rate this business</h6>
-    <div class="container-bordered border border-dark rounded-2 col-md-5 pb-5 px-5 mx-auto">
+    <div class="container-bordered border border-dark rounded-2 col-lg-8 pb-5 px-5 mx-auto">
         <form method="POST" action="{% url 'review' profile.user %}"> <!-- url 'submitReview' profile.id -->
             {% csrf_token %}
-            <div class="row col-5 mb-4 pt-3 mx-auto">
+            <div class="row  my-3 col-lg-5 mx-auto pe-5">
                 <div class="rate">
                     <input type="radio" name="rating" id="rating10" value="5" required/> <label for="rating10" title="5"></label>
                     <input type="radio" name="rating" id="rating9" value="4.5" required/><label for="rating9" title="4.5" class="half"></label>
@@ -24,19 +24,15 @@
                     <input type="radio" name="rating" id="rating1" value="0.5" required/><label for="rating1" title="0.5" class="half"></label>
                 </div>
             </div>
-            <div class="row">
-                <h6>Title:</h6>
-            </div>
-            <div class="row mb-3">
+            <div class="row col-lg-6 mb-3 mx-auto">
+                <label class="form-label">Title:</label>
                 <input type="text" class="form-control" name="title"><br/>
             </div>
-            <div class="row">
-                <h6>Review:</h6>
-            </div>
-            <div class="row mb-3">
+            <div class="row col-lg-6 mb-3 mx-auto">
+                <label class="form-label">Review:</label>
                 <textarea name="text" rows="5" class="form-control"></textarea>
             </div>
-            <div class="row col-2 mx-auto">
+            <div class="row col-lg-3 mx-auto">
                 <input type="submit" value="Submit" class="btn btn-primary">
             </div>
         </form>

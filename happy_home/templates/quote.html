@@ -24,15 +24,15 @@
     </div>
 </div>
 <div class="row">
-    <div class="container col-md-5 pb-5 px-5 mx-auto">
-        <h7>Provide details about your request:</h7>
+    <div class="container col-lg-10 pb-5 px-5 mx-auto">
         <form method="POST" action="#"> <!-- action="url 'quote' provider.user -->
             {% csrf_token %}
-            <div class="row mb-3">
+            <div class="row col-lg-6 mb-3 mx-auto">
+                <h7>Provide details about your request:</h7>
                 <!--<textarea name="text" rows="5" class="form-control"></textarea>-->
                 <textarea type="text" rows="5" name="text" placeholder=" "></textarea>
             </div>
-            <div class="row col-2 mx-auto">
+            <div class="row col-sm-2 mx-auto">
                 <input type="submit" value="Submit" class="btn btn-primary">
             </div>
         </form>
