@@ -6,13 +6,13 @@
 
 
 <div class="row justify-content-center d-flex pb-5">
-    <div class="col-md-2">
-        <p><small><a class="page-links"  role="link" style="text-decoration: none;" href="{% url 'quote' profile.user %}">Request a Quote</a></small></p> 
-    </div>
     {% if user.is_user %}
-    <div class="col-md-2">
-        <p><small><a class="page-links"  role="link" style="text-decoration: none;" href="{% url 'review' profile.user %}">Rate This Business</a></small></p> 
-    </div>
+        <div class="col-md-2">
+            <p><small><a class="page-links"  role="link" style="text-decoration: none;" href="{% url 'quote' profile.user %}">Request a Quote</a></small></p> 
+        </div>
+        <div class="col-md-2">
+            <p><small><a class="page-links"  role="link" style="text-decoration: none;" href="{% url 'review' profile.user %}">Rate This Business</a></small></p> 
+        </div>
     {% endif %}
 </div>
 <div class="row">

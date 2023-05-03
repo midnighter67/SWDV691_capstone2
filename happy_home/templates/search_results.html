@@ -17,10 +17,11 @@
                 <div class="col-md-1">
                     <small><a class="page-links"  style="text-decoration: none;" href="{% url 'publicProfile' result.user %}">profile</a></small>
                 </div>
-                
-                <div class="col-md-1">
-                    <small><a class="page-links"  style="text-decoration: none;" href="#">contact</a></small>
-                </div>
+                {% if user.is_user %}
+                    <div class="col-md-1">
+                        <small><a class="page-links"  style="text-decoration: none;" href="{% url 'quote' result.user %}">contact</a></small>
+                    </div>
+                {% endif %}
             
         </div>
     </div>

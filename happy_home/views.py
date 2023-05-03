@@ -238,13 +238,19 @@ def reply(request, review_id):
     """ save reply text in response to a review that was left by a registered user """
     url = request.META.get('HTTP_REFERER')
     reply = 0
+    review = Review.objects.get(id=review_id)
     if request.method == "POST":
         try:
             reply = Reply.objects.get(review__id=review_id)
             form = ReplyForm(request.POST, instance=reply)
-            form.save()
-            messages.success(request, 'Your reply has been updated')
-            return redirect(url)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your reply has been updated')
+                return redirect('businessReviews', review.provider)
+            else:
+                messages.success(request, 'form invalid')
+                return redirect('reply', review_id)
+            # return redirect(url)
         except Reply.DoesNotExist:
             form = ReplyForm(request.POST)
             if form.is_valid():
@@ -253,7 +259,11 @@ def reply(request, review_id):
                 data.text = form.cleaned_data['text']
                 data.save()
                 messages.success(request, 'Your reply has been saved')
-                return redirect(url)
+                # return redirect(url)
+                return redirect('businessReviews', review.provider)
+            else:
+                messages.success(request, 'form invalid')
+                return redirect('reply', review_id)
     else:
         review = Review.objects.get(id=review_id)
         try:
