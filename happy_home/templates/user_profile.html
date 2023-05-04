@@ -3,7 +3,7 @@
 
 
 {% block content %}
-
+<!-- Displays user profile data in an editable form -->
 
 <div class="row d-flex justify-content-center pb-5">
     <div class="col-md-2">
@@ -13,7 +13,7 @@
         <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'changePassword' %}">update password</a></small></p> 
     </div>
     <div class="col-md-2">
-        <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'deleteAccount' user.username %}">delete account</a></small></p> 
+        <p><small><a class="page-links"  style="text-decoration: none;" onclick="return confirm('Are you sure?');" href="{% url 'deleteAccount' user.username %}">delete account</a></small></p> 
     </div>
 </div>
 <div class="row">

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import User, Provider, Consumer, Reply, Review
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 
 
 
@@ -73,7 +73,7 @@ class UpdatePasswordForm(PasswordChangeForm):
          
             self.fields['old_password'].widget.attrs['class'] = 'form-control'
             self.fields['old_password'].label = ''
-            self.fields['old_password'].widget.attrs['placeholder'] = 'Username'
+            self.fields['old_password'].widget.attrs['placeholder'] = 'Old Password'
             self.fields['old_password'].help_text = ''
                 
             self.fields['new_password1'].widget.attrs['class'] = 'form-control'
@@ -238,75 +238,4 @@ class QuoteForm(forms.Form):
         )
     )
     
-
-
-"""
-class CategoryForm(forms.Form):
-    class Meta:
-        fields = ('cleaning', 'plumbing', 'electrical', 'improvement', 'landscape')
-"""
- 
-"""
-class RatingForm(forms.ModelForm):
-    class Meta:
-        model = Rating
-        fields = ('title', 'rating', 'text')
-"""
-
-
-
-
-"""       
-class EditProfileForm(UserChangeForm):
-    password = forms.CharField(label="", widget=forms.TextInput(attrs={'type': 'hidden'})) # hides link django puts on page
-
-    class Meta:
-        model = User
-        # exclude = (list exclusions) instead of fields = ()
-        fields = ('username', 'first_name', 'last_name', 'email', 'password',) # must have password
-
-    def __init__(self, *args, **kwargs):
-        super(EditProfileForm, self).__init__(*args, **kwargs)
-
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['username'].label = ''
-        self.fields['username'].widget.attrs['placeholder'] = 'Username'
-        self.fields['username'].help_text = ''
-
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].label = ''
-        self.fields['first_name'].widget.attrs['placeholder'] = 'First Name'
-        #self.fields['first_name'].help_text = '<small>Your password must contain at least 8 characters</small>'
-
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].label = ''
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Last Name'
-        #self.fields['last_name'].help_text = '<small>Your password must contain at least 8 characters</small>'
-
-class UpdatePasswordForm(PasswordChangeForm):
-        class Meta:
-            model = User
-            fields = ('old_password', 'new_password1', 'new_password2')
-
-        def __init__(self, *args, **kwargs):
-            super(UpdatePasswordForm, self).__init__(*args, **kwargs)
-         
-            self.fields['old_password'].widget.attrs['class'] = 'form-control'
-            self.fields['old_password'].label = ''
-            self.fields['old_password'].widget.attrs['placeholder'] = 'Username'
-            self.fields['old_password'].help_text = ''
-                
-            self.fields['new_password1'].widget.attrs['class'] = 'form-control'
-            self.fields['new_password1'].label = ''
-            self.fields['new_password1'].widget.attrs['placeholder'] = 'Password'
-            self.fields['new_password1'].help_text = ''
-
-            self.fields['new_password2'].widget.attrs['class'] = 'form-control'
-            self.fields['new_password2'].label = ''
-            self.fields['new_password2'].widget.attrs['placeholder'] = 'Re-enter Password'
-            self.fields['new_password2'].help_text = ''
-
-""" 
-
-
 

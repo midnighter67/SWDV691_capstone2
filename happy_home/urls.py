@@ -17,5 +17,4 @@ urlpatterns = [
     path('user_reviews<info_user>', views.user_reviews, name='userReviews'),
     path('reply<review_id>', views.reply, name='reply'),
     path('quote<profile_id>', views.quote, name='quote'),
-    # path('review<profile_id>', views.submitReview, name='submitReview'),
 ]

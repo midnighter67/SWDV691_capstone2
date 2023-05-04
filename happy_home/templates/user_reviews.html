@@ -3,7 +3,7 @@
 
 
 {% block content %}
-
+<!-- displays a list of reviews left by the logged in user for registered providers -->
 <div class="row col-6 mx-auto mb-5">
     <h2 style="text-align: center">Your Reviews</h2>
 </div>
@@ -45,6 +45,9 @@
         </div>
         <div class="col-5 mx-auto mb-4">
             <p>{{ review.text }}</p>
+        </div>
+        <div class="mb-5">
+            <p><small><a class="page-links"  style="text-decoration: none;" href="{% url 'review' review.provider %}">update review</a></small></p>
         </div>
         {% if reply != 0 %}
             <div class="mb-3">

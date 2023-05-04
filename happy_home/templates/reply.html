@@ -3,15 +3,9 @@
 
 
 {% block content %}
-
+<!-- form for providers to post a reply to a review left by a user -->
 <div class="row text-center">
     <div class="container-bordered border border-dark rounded-2 mb-5 text-center col-lg-5 mx-auto">
-        <!--
-        <div class="mb-3">
-            <h7>Review by:   review.name </h7>
-        </div>
-        -->
-        
         <div class="mb-3">
             {% if review.rating == 0.5 %}
                 <i style='font-size:24px' class='fas col-3 pt-3'>&#xf089;</i>

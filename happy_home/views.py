@@ -195,13 +195,12 @@ def public_profile(request, result_user):
     stats['average'] = average
     stats['floor'] = floor
     stats['half'] = half
-    stats['index'] = index + 1
+    stats['index'] = index 
     
     return render(request, 'public_profile.html', {'profile':profile, 'stats':stats})
 
 def review(request, profile_user):
     """ Save review rating and text left by user """
-    # url = request.META.get('HTTP_REFERER')
     if request.user.is_authenticated:
         current = Consumer.objects.get(email=request.user.email)
         profile = Provider.objects.get(user=profile_user)
@@ -211,7 +210,6 @@ def review(request, profile_user):
                 form = ReviewForm(request.POST, instance=reviews)
                 form.save()
                 messages.success(request, ('Review updated'))
-                # return redirect('url')
             except Review.DoesNotExist:
                 form = ReviewForm(request.POST)
                 if form.is_valid():
@@ -219,11 +217,9 @@ def review(request, profile_user):
                     data.title = form.cleaned_data['title']
                     data.rating = form.cleaned_data['rating']
                     data.text = form.cleaned_data['text']
-                    
                     data.provider = profile_user
                     data.consumer = current.user
-                    data.save()
-                   
+                    data.save()          
                     messages.success(request, ('Review saved'))
             return redirect('publicProfile', profile_user)
         else:
@@ -365,32 +361,3 @@ def quote(request, profile_id):
         messages.success(request, ('You must be logged in to request a quote'))
         return redirect('login')
 
-        
-
-"""
-if request.user.is_authenticated:
-    if request.user.is_user:
-        consumer = Consumer.objects.get(user=info_user) #(email=request.user.email)
-        reviews = Review.objects.filter(consumer=info_user)
-        return render(request, 'user_reviews.html', {'reviews':reviews, 'consumer': consumer} ) # ,'profile_user':profile_user
-    else:
-        messages.success(request, ('You must be logged in as a user'))
-        return redirect('login')
-else:
-    messages.success(request, ('You must be logged in to get review list'))
-    return redirect('login')
-
-
-
-if request.user.is_authenticated:
-        if request.user.is_provider:
-            provider = Provider.objects.get(user=info_user) #(email=request.user.email)
-            reviews = Review.objects.filter(provider=info_user)
-            return render(request, 'business_reviews.html', {'reviews':reviews, 'provider': provider} ) # ,'profile_user':profile_user
-        else:
-            messages.success(request, ('You must be logged in as a business'))
-            return redirect('login')
-    else:
-        messages.success(request, ('You must be logged in to get review list'))
-        return redirect('login')
-"""
