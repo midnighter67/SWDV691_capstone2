@@ -272,28 +272,24 @@ def reply(request, review_id):
 def business_reviews(request, info_user):
     """ generate a list of reviews for the logged in provider left by registered users """
     if request.user.is_authenticated:
-        if request.user.is_provider:
-            provider = Provider.objects.get(user=info_user) 
-            reviews = Review.objects.filter(provider=info_user)
-            users = []
-            replies = []
-            for review in reviews:
-                try:
-                    reply = Reply.objects.get(review__id=review.id)
-                except Reply.DoesNotExist:
-                    reply = 0
-                try:
-                    consumer = Consumer.objects.get(user=review.consumer)
-                    name = consumer.first + " " + consumer.last
-                except Consumer.DoesNotExist:
-                    name = "deleted account"
-                users.append(name)
-                replies.append(reply)
-            data = zip(reviews, users, replies)
-            return render(request, 'business_reviews.html', {'data':data, 'provider': provider} ) 
-        else:
-            messages.success(request, ('You must be logged in as a business'))
-            return redirect('login')
+        provider = Provider.objects.get(user=info_user) 
+        reviews = Review.objects.filter(provider=info_user)
+        users = []
+        replies = []
+        for review in reviews:
+            try:
+                reply = Reply.objects.get(review__id=review.id)
+            except Reply.DoesNotExist:
+                reply = 0
+            try:
+                consumer = Consumer.objects.get(user=review.consumer)
+                name = consumer.first + " " + consumer.last
+            except Consumer.DoesNotExist:
+                name = "deleted account"
+            users.append(name)
+            replies.append(reply)
+        data = zip(reviews, users, replies)
+        return render(request, 'business_reviews.html', {'data':data, 'provider': provider} ) 
     else:
         messages.success(request, ('You must be logged in to get review list'))
         return redirect('login')
